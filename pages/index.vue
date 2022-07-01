@@ -9,7 +9,7 @@
             <span class="engaged">Fernanda</span> &
             <span class="engaged">Paulo Henrique</span>
           </div>
-          <div class="date">25 / 11 Novembro / 2022</div>
+          <div class="date">25 / Novembro / 2022</div>
         </div>
       </v-img>
     </div>
@@ -20,7 +20,7 @@
             Contagem Regressiva para nosso grande dia
           </h2>
 
-          <CountDown :deadline="new Date(2022, 11, 25)" />
+          <CountDown :deadline="new Date(2022, 10, 25, 18)" />
 
           <p>
             Olá queridos amigos e familiares. A contagem regressiva começa, o
