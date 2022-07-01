@@ -25,7 +25,6 @@ jobs:
     - run: yarn run generate --if-present
     - run: yarn run build --if-present
     - name: deploy to DEV
-    - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.FTP_SERVER_DEV }}
