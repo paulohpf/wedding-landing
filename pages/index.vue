@@ -20,6 +20,8 @@
             Contagem Regressiva para nosso grande dia
           </h2>
 
+          <CountDown :deadline="new Date(2022, 11, 25)" />
+
           <p>
             Olá queridos amigos e familiares. A contagem regressiva começa, o
             frio na barriga e toda a ansiedade do dia mais esperado de nossas
@@ -165,6 +167,9 @@
 <script>
 export default {
   name: 'LandingPage',
+  components: {
+    CountDown: () => import('@/components/CountDown.vue'),
+  },
   data: () => ({
     banner: require('@/assets/images/banner.jpg'),
     pix: {
@@ -242,6 +247,11 @@ export default {
 <style lang="scss">
 .banner {
   font-size: 3rem;
+
+  .date {
+    font-size: 2rem;
+  }
+
   .v-image__image {
     opacity: 0.4;
   }
@@ -260,7 +270,4 @@ export default {
 .title {
   font-weight: 600 !important;
 }
-</style>
-
-<style lang="scss" scoped>
 </style>
