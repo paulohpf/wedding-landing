@@ -25,11 +25,11 @@ jobs:
     - run: yarn run generate --if-present
     - run: yarn run build --if-present
     - name: deploy to DEV
-      uses: sebastianpopp/ftp-action@releases/v2
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
-        host: ${{ secrets.FTP_SERVER_DEV }}
-        user: ${{ secrets.FTP_USERNAME_DEV }}
+        server: ${{ secrets.FTP_SERVER_DEV }}
+        username: ${{ secrets.FTP_USERNAME_DEV }}
         password: ${{ secrets.FTP_PASSWORD_DEV }}
-        localDir: "dist"
-        remoteDir: "/dist/."
-        options: "--delete --asci"
+        local-dir: "dist"
+        server-dir: "/dist/."
