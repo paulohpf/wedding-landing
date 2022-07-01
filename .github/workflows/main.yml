@@ -1,0 +1,35 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+on:
+  push:
+    branches: [ "master" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install Yarn
+      run: npm install -g yarn
+    - run: yarn install
+    - run: yarn run generate --if-present
+    - run: yarn run build --if-present
+    - name: deploy to DEV
+      uses: sebastianpopp/ftp-action@releases/v2
+      with:
+        host: ${{ secrets.FTP_SERVER_DEV }}
+        user: ${{ secrets.FTP_USERNAME_DEV }}
+        password: ${{ secrets.FTP_PASSWORD_DEV }}
+        localDir: "dist"
+        remoteDir: "/dist/."
+        options: "--delete --asci"
