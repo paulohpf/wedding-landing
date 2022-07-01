@@ -54,9 +54,6 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -91,6 +88,6 @@ export default {
 
 <style lang="scss">
 .v-application {
-  background: rgb(234, 248, 254) !important;
+  // background: rgb(234, 248, 254) !important;
 }
 </style>

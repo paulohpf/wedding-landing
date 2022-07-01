@@ -1,11 +1,11 @@
 <template>
-  <div class="countdown py-6">
-    <div class="calendar d-flex justify-center">
-      <div class="unit">{{ countdown.days }} <span>Dias</span></div>
-      <div class="unit">{{ countdown.hours }} <span>Horas</span></div>
-      <div class="unit">{{ countdown.minutes }} <span>Minutos</span></div>
-      <div class="unit">{{ countdown.seconds }} <span>Segundos</span></div>
-    </div>
+  <div class="countdown py-4 d-flex justify-center">
+    <v-row class="calendar pa-0 ma-0 justify-center">
+      <v-col cols="2" class="unit ma-2">{{ countdown.days }} <span>Dias</span></v-col>
+      <v-col cols="2" class="unit ma-2">{{ countdown.hours }} <span>Horas</span></v-col>
+      <v-col cols="2" class="unit ma-2">{{ countdown.minutes }} <span>Minutos</span></v-col>
+      <v-col cols="2" class="unit ma-2">{{ countdown.seconds }} <span>Segundos</span></v-col>
+    </v-row>
   </div>
 </template>
 
@@ -70,12 +70,17 @@ export default {
 <style lang="scss" scoped>
 .countdown {
   .calendar {
+    max-width: 400px;
     .unit {
       display: flex;
       flex-direction: column;
       text-align: center;
-      padding: 0 16px;
-      color: #145da0;
+      margin: 0 16px;
+      padding: 8px;
+      color: #eaf8fe;
+      background: rgb(114, 131, 110);
+      border-radius: 2px;
+      font-weight: 500;
 
       > span {
         font-size: 0.6em !important;
