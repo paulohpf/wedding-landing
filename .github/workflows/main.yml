@@ -21,7 +21,7 @@ jobs:
         cache: 'npm'
     - name: Install Yarn
       run: npm install -g yarn
-    - run: yarn install
+    - run: npm install
     - run: yarn run generate --if-present
     - run: yarn run build --if-present
     - name: deploy to DEV
