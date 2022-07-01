@@ -1,10 +1,10 @@
 <template>
   <div class="countdown py-4 d-flex justify-center">
     <v-row class="calendar pa-0 ma-0 justify-center">
-      <v-col cols="2" class="unit ma-2">{{ countdown.days }} <span>Dias</span></v-col>
-      <v-col cols="2" class="unit ma-2">{{ countdown.hours }} <span>Horas</span></v-col>
-      <v-col cols="2" class="unit ma-2">{{ countdown.minutes }} <span>Minutos</span></v-col>
-      <v-col cols="2" class="unit ma-2">{{ countdown.seconds }} <span>Segundos</span></v-col>
+      <v-col cols="2" class="unit ma-2 pa-2">{{ countdown.days }} <span>Dias</span></v-col>
+      <v-col cols="2" class="unit ma-2 pa-2">{{ countdown.hours }} <span>Horas</span></v-col>
+      <v-col cols="2" class="unit ma-2 pa-2">{{ countdown.minutes }} <span>Minutos</span></v-col>
+      <v-col cols="2" class="unit ma-2 pa-2">{{ countdown.seconds }} <span>Segundos</span></v-col>
     </v-row>
   </div>
 </template>
@@ -83,7 +83,7 @@ export default {
       font-weight: 500;
 
       > span {
-        font-size: 0.6em !important;
+        font-size: 0.5em !important;
         text-transform: uppercase;
       }
     }
