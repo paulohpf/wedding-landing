@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="banner">
+    <div class="banner font-buffaloscript">
       <v-img :src="banner">
         <div
           class="banner-content d-flex flex-column justify-center align-center"
@@ -9,24 +9,32 @@
             <span class="engaged">Fernanda</span> &
             <span class="engaged">Paulo Henrique</span>
           </div>
-          <div class="date">25/11/2022</div>
+          <div class="date">25 / 11 Novembro / 2022</div>
         </div>
       </v-img>
     </div>
-    <v-container class="pt-0 mt-0" fluid>
+    <v-container class="pt-0 mt-0">
       <v-row justify="center" align="center">
-        <v-col class="py-6" cols="8">
+        <v-col class="py-6" cols="12">
           <h2 class="title text-center">
             Contagem Regressiva para nosso grande dia
           </h2>
+
+          <p>
+            Olá queridos amigos e familiares. A contagem regressiva começa, o
+            frio na barriga e toda a ansiedade do dia mais esperado de nossas
+            vidas nos enche de alegria em tê-los ao nosso lado. Vamos juntos
+            nesse grande sonho, o dia em que uniremos nossas almas e corpos para
+            sempre, o dia do nosso casamento.
+          </p>
         </v-col>
-        <v-col class="py-6" cols="8">
+        <v-col class="py-6" cols="12">
           <h2 class="title text-center">
             Confirme a sua presença em nosso casamento!
           </h2>
           <v-form>
             <template v-if="!inviteGuests.length">
-              <span>
+              <span class="d-block text-center">
                 Digite o nome conforme consta em seu convite para confirmar sua
                 presença.
               </span>
@@ -39,8 +47,7 @@
 
             <template v-if="inviteGuests.length">
               <span>
-                Digite o nome conforme consta em seu convite para confirmar sua
-                presença.
+                Confirme a presença dos convidados selecionando cada um.
               </span>
 
               <div class="d-flex flex-row justify-center">
@@ -87,7 +94,7 @@
                 Confirmado com sucesso!
               </v-card-title>
 
-              <v-card-text> Sua presença foi confirmada, caso </v-card-text>
+              <v-card-text>Sua presença foi confirmada, caso </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -97,11 +104,58 @@
             </v-card>
           </v-dialog>
         </v-col>
-        <v-col class="py-6" cols="8">
+        <v-col class="pix-wedding py-6" cols="12">
           <h2 class="title text-center">
             Nosso pix para caso queira nos presentear com alguma cota para nossa
             lua de mel
           </h2>
+
+          <v-row>
+            <v-col cols="12" class="d-flex justify-center">
+              <v-btn @click="setVisiblePix(0)">R$50</v-btn>
+              <v-btn @click="setVisiblePix(1)">R$100</v-btn>
+              <v-btn @click="setVisiblePix(2)">Livre</v-btn>
+            </v-col>
+            <v-col
+              cols="12"
+              class="d-flex flex-column align-center text-center"
+            >
+              <v-img
+                max-width="250px"
+                :src="pix.pixes[pix.visible].img"
+                contain
+                @click="copyPix"
+              />
+              <span>Clique na imagem para copiar</span>
+              <v-snackbar v-model="pix.snackbar" timeout="3000">
+                Pix copiado para a área de transferencia
+
+                <template #action="{ attrs }">
+                  <v-btn
+                    color="pink"
+                    text
+                    v-bind="attrs"
+                    @click="pix.snackbar = false"
+                  >
+                    Close
+                  </v-btn>
+                </template>
+              </v-snackbar>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col class="py-6" cols="12">
+          <h2 class="title text-center">Lista de Presentes</h2>
+
+          <span class="d-block text-center"
+            >Veja nossa lista de presentes
+            <a
+              href="https://www.querodecasamento.com.br/lista-de-casamento/fernanda-santos-paulo-henrique"
+              target="_blank"
+              rel="noopener noreferrer"
+              >clicando aqui</a
+            >.</span
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -113,6 +167,24 @@ export default {
   name: 'LandingPage',
   data: () => ({
     banner: require('@/assets/images/banner.jpg'),
+    pix: {
+      visible: 0,
+      snackbar: false,
+      pixes: [
+        {
+          code: '00020126580014BR.GOV.BCB.PIX01366bee65ed-4328-4436-822c-917fa60b0ba2520400005303986540550.005802BR5924Paulo Henrique P. Franco6005Bauru62070503***63047A4D',
+          img: require('@/assets/images/pix/pix50.png'),
+        },
+        {
+          code: '00020126580014BR.GOV.BCB.PIX01366bee65ed-4328-4436-822c-917fa60b0ba25204000053039865406100.005802BR5924Paulo Henrique P. Franco6005Bauru62070503***63041031',
+          img: require('@/assets/images/pix/pix100.png'),
+        },
+        {
+          code: '00020126580014BR.GOV.BCB.PIX01366bee65ed-4328-4436-822c-917fa60b0ba25204000053039865802BR5924Paulo Henrique P. Franco6005Bauru62070503***63040548',
+          img: require('@/assets/images/pix/free.png'),
+        },
+      ],
+    },
     inviteFormError: false,
     inviteFormSuccess: false,
     inviteLoading: false,
@@ -120,9 +192,6 @@ export default {
     inviteGuests: [],
     inviteConfirmGuests: [],
   }),
-  updated() {
-    console.log(this)
-  },
   methods: {
     resetInvite() {
       this.inviteGuests = []
@@ -144,9 +213,9 @@ export default {
         .doc(inviteNameFormatted)
         .get('guests')
         .then((res) => {
-          console.log(res.data())
+          // console.log(res.data())
           this.inviteGuests = res.data().guests
-          console.log(this.inviteGuests)
+          // console.log(this.inviteGuests)
 
           this.inviteLoading = false
         })
@@ -159,12 +228,20 @@ export default {
       this.resetInvite()
       this.inviteFormSuccess = true
     },
+    setVisiblePix(pos) {
+      this.pix.visible = pos
+    },
+    copyPix() {
+      navigator.clipboard.writeText(this.pix.pixes[this.pix.visible].code)
+      this.pix.snackbar = true
+    },
   },
 }
 </script>
 
 <style lang="scss">
 .banner {
+  font-size: 3rem;
   .v-image__image {
     opacity: 0.4;
   }
@@ -179,4 +256,11 @@ export default {
     }
   }
 }
+
+.title {
+  font-weight: 600 !important;
+}
+</style>
+
+<style lang="scss" scoped>
 </style>

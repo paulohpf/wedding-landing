@@ -9,8 +9,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - wedding-landing',
-    title: 'wedding-landing',
+    titleTemplate: '%s - 25/11/2022',
+    title: 'Casamento Ph e Fernanda',
     htmlAttrs: {
       lang: 'en',
     },
