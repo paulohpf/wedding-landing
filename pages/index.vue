@@ -99,7 +99,10 @@
                   Confirmado com sucesso!
                 </v-card-title>
 
-                <v-card-text>Sua presença foi confirmada, caso </v-card-text>
+                <v-card-text
+                  >Sua presença foi confirmada, caso necessário refaça o
+                  processo para atualizar</v-card-text
+                >
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -205,6 +208,11 @@ export default {
     inviteGuests: [],
     inviteConfirmGuests: [],
   }),
+  computed: {
+    inviteNameFormatted() {
+      return this.inviteName.replace(/\s/g, '-').toLowerCase()
+    },
+  },
   methods: {
     resetInvite() {
       this.inviteGuests = []
@@ -216,19 +224,14 @@ export default {
       this.resetInvite()
       this.inviteLoading = true
 
-      const inviteNameFormatted = this.inviteName
-        .replace(/\s/g, '-')
-        .toLowerCase()
-
       this.$fireModule
         .firestore()
         .collection('invitations')
-        .doc(inviteNameFormatted)
+        .doc(this.inviteNameFormatted)
         .get('guests')
         .then((res) => {
-          // console.log(res.data())
           this.inviteGuests = res.data().guests
-          // console.log(this.inviteGuests)
+          this.inviteConfirmGuests = res.data().confirm
 
           this.inviteLoading = false
         })
@@ -237,7 +240,14 @@ export default {
           this.inviteLoading = false
         })
     },
-    confirmInvite() {
+    async confirmInvite() {
+      const invitation = await this.$fireModule
+        .firestore()
+        .collection('invitations')
+        .doc(this.inviteNameFormatted)
+
+      invitation.update({ confirm: this.inviteConfirmGuests })
+
       this.resetInvite()
       this.inviteFormSuccess = true
     },
