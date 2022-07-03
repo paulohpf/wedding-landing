@@ -181,6 +181,13 @@ export default {
   components: {
     CountDown: () => import('@/components/CountDown.vue'),
   },
+  layout(context) {
+    if (context.$fire.auth.currentUser) {
+      return 'logged'
+    } else {
+      return 'default'
+    }
+  },
   data: () => ({
     banner: require('@/assets/images/banner.jpg'),
     pix: {
