@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    {{ editedItem.inviteName }}
     <v-data-table
       :headers="table.headers"
       :items="invites"
@@ -19,12 +18,12 @@
               </v-btn>
             </template>
             <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
+              <v-form v-model="formValid" @submit.prevent="submit">
+                <v-card-title>
+                  <span class="text-h5">{{ formTitle }}</span>
+                </v-card-title>
 
-              <v-card-text>
-                <v-form :valid="editedItem.formValid">
+                <v-card-text>
                   <v-container>
                     <v-row>
                       <v-col cols="12">
@@ -32,22 +31,21 @@
                           v-model="editedItem.inviteName"
                           :value="editedItem.inviteName"
                           label="Nome no convite"
+                          :disabled="editedIndex !== -1"
                         />
                       </v-col>
                       <v-col
                         v-for="(guest, key) in editedItem.guests"
-                        :key="key"
+                        :key="key + 1"
                         cols="12"
                       >
                         <v-row>
                           <v-col cols="5">
-                            {{ editedItem.guests[key].name }}
-                            {{ key }}
-
                             <v-text-field
                               v-model="editedItem.guests[key].name"
                               :value="editedItem.guests[key].name"
                               label="Convidado"
+                              :rules="rules.guestName"
                             />
                           </v-col>
                           <v-col cols="5">
@@ -58,28 +56,37 @@
                               :value="editedItem.guests[key].confirm"
                             />
                           </v-col>
-                          <v-col
-                            v-if="editedItem.guests.length === key + 1"
-                            cols="2"
-                          >
-                            <v-btn @click="addNewGuest">
-                              <v-icon>mdi-plus</v-icon>
-                            </v-btn>
+                          <v-col cols="2" class="d-flex">
+                            <v-icon @click="removeGuest(key)"
+                              >mdi-delete</v-icon
+                            >
+
+                            <v-icon
+                              v-if="editedItem.guests.length === key + 1"
+                              @click="addNewGuest"
+                              >mdi-plus</v-icon
+                            >
                           </v-col>
                         </v-row>
                       </v-col>
                     </v-row>
                   </v-container>
-                </v-form>
-              </v-card-text>
+                </v-card-text>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Salvar </v-btn>
-              </v-card-actions>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close">
+                    Cancelar
+                  </v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    :disabled="!formValid"
+                    @click="save"
+                  >
+                    Salvar
+                  </v-btn>
+                </v-card-actions>
+              </v-form>
             </v-card>
           </v-dialog>
         </v-toolbar>
@@ -99,32 +106,48 @@
 export default {
   name: 'LoggedArea',
   layout: 'logged',
-  data: () => ({
-    table: {
-      headers: [
-        {
-          text: 'Convite',
-          align: 'start',
-          sortable: false,
-          value: 'id',
-        },
-        { text: 'Actions', value: 'actions', sortable: false },
-      ],
-    },
-    invites: [],
-    editedIndex: -1,
-    editedItem: {
-      inviteName: '',
-      guests: [],
+  data() {
+    return {
+      table: {
+        headers: [
+          {
+            text: 'Convite',
+            align: 'start',
+            sortable: false,
+            value: 'id',
+          },
+          { text: 'Actions', value: 'actions', sortable: false },
+        ],
+      },
+      rules: {
+        guestName: [(v) => !!v || 'Campo Obrigatório'],
+      },
       formValid: false,
-    },
-    defaultItem: {
-      inviteName: '',
-      guests: [],
-      formValid: false,
-    },
-    dialog: false,
-  }),
+      invites: [],
+      editedIndex: -1,
+      editedItem: {
+        inviteName: '',
+        guests: [
+          {
+            name: '',
+            confirm: false,
+          },
+        ],
+        firebaseInvite: {},
+      },
+      defaultItem: {
+        inviteName: '',
+        guests: [
+          {
+            name: '',
+            confirm: false,
+          },
+        ],
+        firebaseInvite: {},
+      },
+      dialog: false,
+    }
+  },
   computed: {
     verifyUser() {
       return this.$fire.auth.currentUser
@@ -142,8 +165,8 @@ export default {
     console.log(this)
   },
   methods: {
-    async getInvites() {
-      await this.$fireModule
+    getInvites() {
+      this.$fireModule
         .firestore()
         .collection('invitations')
         .get()
@@ -151,8 +174,8 @@ export default {
           this.invites = res.docs
         })
     },
-    async getInvite(docId) {
-      return await this.$fireModule
+    getInvite(docId) {
+      return this.$fireModule
         .firestore()
         .collection('invitations')
         .doc(docId)
@@ -161,28 +184,25 @@ export default {
           return res.data()
         })
     },
-    async addNewGuest() {
-      console.log(this.editedItem)
-
-      await this.$set(
-        this.editedItem.guests,
-        this.editedItem.guests.length,
-        JSON.parse(
-          JSON.stringify({
-            name: '',
-            confirm: false,
-          })
-        )
-      )
+    addNewGuest() {
+      this.editedItem.guests.push({
+        name: '',
+        confirm: false,
+      })
     },
-    async editItem(item) {
-      await this.getInvite(item.id).then((res) => {
-        console.log({ item, res })
+    removeGuest(key) {
+      this.editedItem.guests.splice(key, 1)
 
+      if (!this.editedItem.guests.length) {
+        this.addNewGuest()
+      }
+    },
+    editItem(item) {
+      this.getInvite(item.id).then((res) => {
         this.editedIndex = this.invites.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.editedItem.inviteName = 'aaaaaa'
+        this.editedItem.inviteName = item.id
         this.editedItem.guests = res.guests
+
         this.dialog = true
       })
     },
@@ -202,6 +222,8 @@ export default {
         this.editedIndex = -1
       })
     },
+
+    // TODO: Delete from Table
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
@@ -209,12 +231,24 @@ export default {
         this.editedIndex = -1
       })
     },
+    async save() {
+      console.log(this.editedItem.inviteName)
 
-    save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        // Update
+        const invite = await this.$fireModule
+          .firestore()
+          .collection('invitations')
+          .doc(this.editedItem.inviteName)
+
+        invite.update({ guests: this.editedItem.guests })
       } else {
-        this.desserts.push(this.editedItem)
+        // Create
+        await this.$fireModule
+          .firestore()
+          .collection('invitations')
+          .doc(String(this.editedItem.inviteName).toLowerCase())
+          .set({ guests: this.editedItem.guests })
       }
       this.close()
     },

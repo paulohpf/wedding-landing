@@ -17,7 +17,7 @@
           />
         </v-col>
         <v-col>
-          <v-btn :disabled="!loginForm.valid" @click="doLogin"> Entrar </v-btn>
+          <v-btn :disabled="!loginForm.valid" @click="doLogin">Entrar</v-btn>
         </v-col>
       </v-row>
     </v-container>
