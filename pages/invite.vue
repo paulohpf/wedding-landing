@@ -181,6 +181,9 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'Novo convite' : 'Editar convite'
     },
+    inviteNameFormatted() {
+      return String(this.editedItem.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase()
+    }
   },
   mounted() {
     this.getInvites()
@@ -245,7 +248,7 @@ export default {
       await this.$fireModule
         .firestore()
         .collection('invitations')
-        .doc(String(this.editedItem.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase())
+        .doc(this.inviteNameFormatted)
         .delete()
 
       this.getInvites()
@@ -266,7 +269,7 @@ export default {
         const invite = await this.$fireModule
           .firestore()
           .collection('invitations')
-          .doc(String(this.editedItem.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase())
+          .doc(this.inviteNameFormatted)
 
         invite.update({ guests: this.editedItem.guests })
       } else {
@@ -274,7 +277,7 @@ export default {
         await this.$fireModule
           .firestore()
           .collection('invitations')
-          .doc(String(this.editedItem.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase())
+          .doc(this.inviteNameFormatted)
           .set({ guests: this.editedItem.guests })
       }
 

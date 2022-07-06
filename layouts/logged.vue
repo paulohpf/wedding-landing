@@ -83,7 +83,7 @@ export default {
         {
           icon: 'mdi-chart-bubble',
           title: 'Login',
-          to: '/login',
+          to: '/invite',
         },
       ],
       miniVariant: false,

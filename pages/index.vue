@@ -59,10 +59,9 @@
                   <v-checkbox
                     v-for="(guest, key) in inviteGuests"
                     :key="key"
-                    v-model="inviteConfirmGuests"
-                    :value="guest"
+                    v-model="inviteGuests[key].confirm"
                     class="pa-2"
-                    :label="guest"
+                    :label="guest.name"
                   />
                 </div>
                 <div class="d-flex flex-row justify-center">
@@ -213,17 +212,19 @@ export default {
     inviteLoading: false,
     inviteName: 'Paulo e Jussara',
     inviteGuests: [],
-    inviteConfirmGuests: [],
   }),
   computed: {
     inviteNameFormatted() {
-      return this.inviteName.replace(/\s/g, '-').toLowerCase()
+      // return this.inviteName.replace(/\s/g, '-').toLowerCase()
+      return String(this.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase()
     },
+  },
+  updated() {
+console.log(this);
   },
   methods: {
     resetInvite() {
       this.inviteGuests = []
-      this.inviteConfirmGuests = []
       this.inviteFormError = false
       this.inviteFormSuccess = false
     },
@@ -238,7 +239,6 @@ export default {
         .get('guests')
         .then((res) => {
           this.inviteGuests = res.data().guests
-          this.inviteConfirmGuests = res.data().confirm
 
           this.inviteLoading = false
         })
@@ -253,7 +253,7 @@ export default {
         .collection('invitations')
         .doc(this.inviteNameFormatted)
 
-      invitation.update({ confirm: this.inviteConfirmGuests })
+      invitation.update({ guests: this.inviteGuests })
 
       this.resetInvite()
       this.inviteFormSuccess = true
