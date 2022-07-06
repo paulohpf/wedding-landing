@@ -210,7 +210,7 @@ export default {
     inviteFormError: false,
     inviteFormSuccess: false,
     inviteLoading: false,
-    inviteName: 'Paulo e Jussara',
+    inviteName: '',
     inviteGuests: [],
   }),
   computed: {
