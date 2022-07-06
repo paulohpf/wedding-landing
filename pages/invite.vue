@@ -89,6 +89,31 @@
               </v-form>
             </v-card>
           </v-dialog>
+
+          <!-- Delete Dialog -->
+          <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card>
+              <v-card-title class="text-h5"
+                >Tem certeza que deseja deletar?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="red darken-1"
+                  class="white--text"
+                  @click="close"
+                  >Cancelar</v-btn
+                >
+                <v-btn
+                  color="green darken-1"
+                  class="white--text"
+                  @click="deleteItemConfirm()"
+                  >Confirmar</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-toolbar>
       </template>
       <template #item.actions="{ item }">
@@ -146,6 +171,7 @@ export default {
         firebaseInvite: {},
       },
       dialog: false,
+      dialogDelete: false,
     }
   },
   computed: {
@@ -157,12 +183,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this)
-
     this.getInvites()
-  },
-  updated() {
-    console.log(this)
   },
   methods: {
     getInvites() {
@@ -190,6 +211,8 @@ export default {
         confirm: false,
       })
     },
+
+    // Remove um convidado (Guest) sem alterar o banco
     removeGuest(key) {
       this.editedItem.guests.splice(key, 1)
 
@@ -197,6 +220,7 @@ export default {
         this.addNewGuest()
       }
     },
+
     editItem(item) {
       this.getInvite(item.id).then((res) => {
         this.editedIndex = this.invites.indexOf(item)
@@ -206,25 +230,30 @@ export default {
         this.dialog = true
       })
     },
+
+    // Abre a caixa de dialogo de deleção
     deleteItem(item) {
       this.editedIndex = this.invites.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      this.editedItem.inviteName = item.id
       this.dialogDelete = true
     },
-    deleteItemConfirm() {
+
+    // Deleta um convite (Invite)
+    async deleteItemConfirm() {
       this.invites.splice(this.editedIndex, 1)
-      this.closeDelete()
+
+      await this.$fireModule
+        .firestore()
+        .collection('invitations')
+        .doc(String(this.editedItem.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase())
+        .delete()
+
+      this.getInvites()
+      this.close()
     },
+    // Reseta o estado de todos os components
     close() {
       this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-
-    // TODO: Delete from Table
-    closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
@@ -232,14 +261,12 @@ export default {
       })
     },
     async save() {
-      console.log(this.editedItem.inviteName)
-
       if (this.editedIndex > -1) {
         // Update
         const invite = await this.$fireModule
           .firestore()
           .collection('invitations')
-          .doc(this.editedItem.inviteName)
+          .doc(String(this.editedItem.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase())
 
         invite.update({ guests: this.editedItem.guests })
       } else {
@@ -247,9 +274,11 @@ export default {
         await this.$fireModule
           .firestore()
           .collection('invitations')
-          .doc(String(this.editedItem.inviteName).toLowerCase())
+          .doc(String(this.editedItem.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase())
           .set({ guests: this.editedItem.guests })
       }
+
+      this.getInvites()
       this.close()
     },
   },
