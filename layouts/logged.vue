@@ -94,7 +94,8 @@ export default {
   },
   computed: {
     verifyUser() {
-      return this.$fire.auth.currentUser
+      // return this.$fire.auth.currentUser
+      return false
     },
   },
 }

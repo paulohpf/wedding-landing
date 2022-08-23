@@ -45,15 +45,15 @@ export default {
   },
   methods: {
     doLogin() {
-      this.$fire.auth
-        .signInWithEmailAndPassword(
-          this.loginForm.email,
-          this.loginForm.password
-        )
-        .catch((err) => {
-          // eslint-disable-next-line no-console
-          console.error(err)
-        })
+      // this.$fire.auth
+      //   .signInWithEmailAndPassword(
+      //     this.loginForm.email,
+      //     this.loginForm.password
+      //   )
+      //   .catch((err) => {
+      //     // eslint-disable-next-line no-console
+      //     console.error(err)
+      //   })
     },
   },
 }
