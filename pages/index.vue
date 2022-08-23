@@ -215,12 +215,11 @@ export default {
   }),
   computed: {
     inviteNameFormatted() {
-      // return this.inviteName.replace(/\s/g, '-').toLowerCase()
-      return String(this.inviteName).normalize('NFD').replace(/[\u0300-\u036F]/g, "").toLowerCase()
+      return String(this.inviteName)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036F]/g, '')
+        .toLowerCase()
     },
-  },
-  updated() {
-console.log(this);
   },
   methods: {
     resetInvite() {
