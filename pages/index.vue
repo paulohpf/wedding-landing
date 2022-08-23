@@ -228,34 +228,34 @@ export default {
       this.inviteFormSuccess = false
     },
     getInvite() {
-      this.resetInvite()
-      this.inviteLoading = true
+      // this.resetInvite()
+      // this.inviteLoading = true
 
-      this.$fireModule
-        .firestore()
-        .collection('invitations')
-        .doc(this.inviteNameFormatted)
-        .get('guests')
-        .then((res) => {
-          this.inviteGuests = res.data().guests
+      // this.$fireModule
+      //   .firestore()
+      //   .collection('invitations')
+      //   .doc(this.inviteNameFormatted)
+      //   .get('guests')
+      //   .then((res) => {
+      //     this.inviteGuests = res.data().guests
 
-          this.inviteLoading = false
-        })
-        .catch(() => {
-          this.inviteFormError = true
-          this.inviteLoading = false
-        })
+      //     this.inviteLoading = false
+      //   })
+      //   .catch(() => {
+      //     this.inviteFormError = true
+      //     this.inviteLoading = false
+      //   })
     },
     async confirmInvite() {
-      const invitation = await this.$fireModule
-        .firestore()
-        .collection('invitations')
-        .doc(this.inviteNameFormatted)
+      // const invitation = await this.$fireModule
+      //   .firestore()
+      //   .collection('invitations')
+      //   .doc(this.inviteNameFormatted)
 
-      invitation.update({ guests: this.inviteGuests })
+      // invitation.update({ guests: this.inviteGuests })
 
-      this.resetInvite()
-      this.inviteFormSuccess = true
+      // this.resetInvite()
+      // this.inviteFormSuccess = true
     },
     setVisiblePix(pos) {
       this.pix.visible = pos
