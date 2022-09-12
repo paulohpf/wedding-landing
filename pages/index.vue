@@ -26,92 +26,30 @@
             <p>
               Olá queridos amigos e familiares. A contagem regressiva começa, o
               frio na barriga e toda a ansiedade do dia mais esperado de nossas
-              vidas nos enche de alegria em tê-los ao nosso lado. Vamos juntos
-              nesse grande sonho, o dia em que uniremos nossas almas e corpos
-              para sempre, o dia do nosso casamento.
+              vidas, e nos enche de alegria em tê-los ao nosso lado! Vamos
+              juntos nesse grande sonho, o dia em que uniremos nossas almas e
+              corpos para sempre, o dia do nosso casamento!!!
             </p>
           </v-container>
         </v-col>
-        <v-col class="section py-6 d-flex justify-center" cols="12">
-          <v-container class="pa-0 ma-0">
-            <h2 class="title text-center">
-              Confirme a sua presença em nosso casamento!
-            </h2>
-            <v-form>
-              <template v-if="!inviteGuests.length">
-                <span class="d-block text-center">
-                  Digite o nome conforme consta em seu convite para confirmar
-                  sua presença.
-                </span>
+        <!-- <v-col class="section py-6 d-flex justify-center" cols="12">
+          <v-container>
+            <h2 class="title text-center">Confirmação de presença</h2>
 
-                <v-text-field v-model="inviteName" label="Nome no convite" />
-                <v-btn :loading="inviteLoading" @click="getInvite">
-                  Pesquisar convite
-                </v-btn>
-              </template>
-
-              <template v-if="inviteGuests.length">
-                <span>
-                  Confirme a presença dos convidados selecionando cada um.
-                </span>
-
-                <div class="d-flex flex-row justify-center">
-                  <v-checkbox
-                    v-for="(guest, key) in inviteGuests"
-                    :key="key"
-                    v-model="inviteGuests[key].confirm"
-                    class="pa-2"
-                    :label="guest.name"
-                  />
-                </div>
-                <div class="d-flex flex-row justify-center">
-                  <v-btn :loading="inviteLoading" @click="confirmInvite">
-                    Confirmar Presença
-                  </v-btn>
-                </div>
-              </template>
-            </v-form>
-
-            <!-- Modal de Erro -->
-            <v-dialog v-model="inviteFormError">
-              <v-card>
-                <v-card-title class="text-h5">
-                  Ops, convite não encontrado!
-                </v-card-title>
-
-                <v-card-text>
-                  Seu convite não foi encontrado, verifique se o nome está
-                  escrito conforme consta em seu convite e tente novamente.
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn text @click="inviteFormError = false">Entendi</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-            <v-dialog v-model="inviteFormSuccess">
-              <v-card>
-                <v-card-title class="text-h5">
-                  Confirmado com sucesso!
-                </v-card-title>
-
-                <v-card-text
-                  >Sua presença foi confirmada, caso necessário refaça o
-                  processo para atualizar</v-card-text
-                >
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn text @click="inviteFormSuccess = false">Entendi</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+            <p>Confirme a sua presença em nosso casamento!</p>
+            <p>
+              <a
+                href="https://api.whatsapp.com/send?phone=INSERIR TELEFONE"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Clique aqui</a
+              >
+              e você será direcionado ao número do WhatsApp, envie uma mensagem
+              confirmando sua presença e de quem foi convidado com você (ver
+              convite individual).
+            </p>
           </v-container>
-        </v-col>
+        </v-col> -->
         <v-col class="section py-6 d-flex justify-center" cols="12">
           <v-container class="pa-0 ma-0">
             <h2 class="title text-center">Lista de Presentes</h2>
@@ -136,9 +74,15 @@
 
             <v-row>
               <v-col cols="12" class="d-flex justify-center">
-                <v-btn @click="setVisiblePix(0)">R$50</v-btn>
-                <v-btn @click="setVisiblePix(1)">R$100</v-btn>
-                <v-btn @click="setVisiblePix(2)">Livre</v-btn>
+                <v-btn :disabled="pix.visible === 0" @click="setVisiblePix(0)"
+                  >R$50</v-btn
+                >
+                <v-btn :disabled="pix.visible === 1" @click="setVisiblePix(1)"
+                  >R$100</v-btn
+                >
+                <v-btn :disabled="pix.visible === 2" @click="setVisiblePix(2)"
+                  >Livre</v-btn
+                >
               </v-col>
               <v-col
                 cols="12"
@@ -231,7 +175,6 @@ export default {
     getInvite() {
       // this.resetInvite()
       // this.inviteLoading = true
-
       // this.$fireModule
       //   .firestore()
       //   .collection('invitations')
@@ -239,7 +182,6 @@ export default {
       //   .get('guests')
       //   .then((res) => {
       //     this.inviteGuests = res.data().guests
-
       //     this.inviteLoading = false
       //   })
       //   .catch(() => {
@@ -252,9 +194,7 @@ export default {
       //   .firestore()
       //   .collection('invitations')
       //   .doc(this.inviteNameFormatted)
-
       // invitation.update({ guests: this.inviteGuests })
-
       // this.resetInvite()
       // this.inviteFormSuccess = true
     },
