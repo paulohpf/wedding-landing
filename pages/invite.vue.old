@@ -190,23 +190,23 @@ export default {
   },
   methods: {
     getInvites() {
-      this.$fireModule
-        .firestore()
-        .collection('invitations')
-        .get()
-        .then((res) => {
-          this.invites = res.docs
-        })
+      // this.$fireModule
+      //   .firestore()
+      //   .collection('invitations')
+      //   .get()
+      //   .then((res) => {
+      //     this.invites = res.docs
+      //   })
     },
     getInvite(docId) {
-      return this.$fireModule
-        .firestore()
-        .collection('invitations')
-        .doc(docId)
-        .get()
-        .then((res) => {
-          return res.data()
-        })
+      // return this.$fireModule
+      //   .firestore()
+      //   .collection('invitations')
+      //   .doc(docId)
+      //   .get()
+      //   .then((res) => {
+      //     return res.data()
+      //   })
     },
     addNewGuest() {
       this.editedItem.guests.push({
@@ -243,16 +243,16 @@ export default {
 
     // Deleta um convite (Invite)
     async deleteItemConfirm() {
-      this.invites.splice(this.editedIndex, 1)
+      // this.invites.splice(this.editedIndex, 1)
 
-      await this.$fireModule
-        .firestore()
-        .collection('invitations')
-        .doc(this.inviteNameFormatted)
-        .delete()
+      // await this.$fireModule
+      //   .firestore()
+      //   .collection('invitations')
+      //   .doc(this.inviteNameFormatted)
+      //   .delete()
 
-      this.getInvites()
-      this.close()
+      // this.getInvites()
+      // this.close()
     },
     // Reseta o estado de todos os components
     close() {
@@ -264,25 +264,25 @@ export default {
       })
     },
     async save() {
-      if (this.editedIndex > -1) {
-        // Update
-        const invite = await this.$fireModule
-          .firestore()
-          .collection('invitations')
-          .doc(this.inviteNameFormatted)
+      // if (this.editedIndex > -1) {
+      //   // Update
+      //   const invite = await this.$fireModule
+      //     .firestore()
+      //     .collection('invitations')
+      //     .doc(this.inviteNameFormatted)
 
-        invite.update({ guests: this.editedItem.guests })
-      } else {
-        // Create
-        await this.$fireModule
-          .firestore()
-          .collection('invitations')
-          .doc(this.inviteNameFormatted)
-          .set({ guests: this.editedItem.guests })
-      }
+      //   invite.update({ guests: this.editedItem.guests })
+      // } else {
+      //   // Create
+      //   await this.$fireModule
+      //     .firestore()
+      //     .collection('invitations')
+      //     .doc(this.inviteNameFormatted)
+      //     .set({ guests: this.editedItem.guests })
+      // }
 
-      this.getInvites()
-      this.close()
+      // this.getInvites()
+      // this.close()
     },
   },
 }

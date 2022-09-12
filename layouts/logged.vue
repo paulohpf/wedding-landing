@@ -82,7 +82,7 @@ export default {
         },
         {
           icon: 'mdi-chart-bubble',
-          title: 'Login',
+          title: 'Convidados',
           to: '/invite',
         },
       ],
@@ -94,7 +94,8 @@ export default {
   },
   computed: {
     verifyUser() {
-      return this.$fire.auth.currentUser
+      // return this.$fire.auth.currentUser
+      return false
     },
   },
 }

@@ -11,7 +11,8 @@ export default {
   name: 'DefaultLayout',
   computed: {
     verifyUser() {
-      return this.$fire.auth.currentUser
+      // return this.$fire.auth.currentUser
+      return null
     },
   }
 }
