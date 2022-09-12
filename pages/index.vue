@@ -166,6 +166,18 @@ export default {
         .toLowerCase()
     },
   },
+  mounted() {
+    /**
+     * Cloudflare Web Analytics
+     */
+      const script = document.createElement("script");
+      script.onload = this.onScriptLoaded;
+      script.setAttribute('defer', true);
+      script.setAttribute('data-cf-beacon', '{"token": "159f7f956c944ee1b9b1664bbc30a1a9"}');
+      script.type = "text/javascript";
+      script.src = "https://static.cloudflareinsights.com/beacon.min.js";
+      document.head.appendChild(script);
+  },
   methods: {
     resetInvite() {
       this.inviteGuests = []
