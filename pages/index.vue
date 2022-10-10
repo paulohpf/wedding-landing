@@ -39,7 +39,7 @@
             <p>Confirme a sua presença em nosso casamento!</p>
             <p>
               <a
-                href="https://api.whatsapp.com/send?phone=5514988375191"
+                href="https://api.whatsapp.com/send/?phone=5514988375191&text=Ol%C3%A1%2C+gostaria+de+confirmar+minha+presen%C3%A7a+no+casamento+da+Fer+e+do+Ph%21+%3A%5D&type=phone_number&app_absent=0"
                 target="_blank"
                 rel="noopener noreferrer"
                 >Clique aqui</a
