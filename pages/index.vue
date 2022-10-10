@@ -32,14 +32,14 @@
             </p>
           </v-container>
         </v-col>
-        <!-- <v-col class="section py-6 d-flex justify-center" cols="12">
+        <v-col class="section py-6 d-flex justify-center" cols="12">
           <v-container>
             <h2 class="title text-center">Confirmação de presença</h2>
 
             <p>Confirme a sua presença em nosso casamento!</p>
             <p>
               <a
-                href="https://api.whatsapp.com/send?phone=INSERIR TELEFONE"
+                href="https://api.whatsapp.com/send?phone=5514988375191"
                 target="_blank"
                 rel="noopener noreferrer"
                 >Clique aqui</a
@@ -49,7 +49,7 @@
               convite individual).
             </p>
           </v-container>
-        </v-col> -->
+        </v-col>
         <v-col class="section py-6 d-flex justify-center" cols="12">
           <v-container class="pa-0 ma-0">
             <h2 class="title text-center">Lista de Presentes</h2>
@@ -170,13 +170,16 @@ export default {
     /**
      * Cloudflare Web Analytics
      */
-      const script = document.createElement("script");
-      script.onload = this.onScriptLoaded;
-      script.setAttribute('defer', true);
-      script.setAttribute('data-cf-beacon', '{"token": "159f7f956c944ee1b9b1664bbc30a1a9"}');
-      script.type = "text/javascript";
-      script.src = "https://static.cloudflareinsights.com/beacon.min.js";
-      document.head.appendChild(script);
+    const script = document.createElement('script')
+    script.onload = this.onScriptLoaded
+    script.setAttribute('defer', true)
+    script.setAttribute(
+      'data-cf-beacon',
+      '{"token": "159f7f956c944ee1b9b1664bbc30a1a9"}'
+    )
+    script.type = 'text/javascript'
+    script.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+    document.head.appendChild(script)
   },
   methods: {
     resetInvite() {
